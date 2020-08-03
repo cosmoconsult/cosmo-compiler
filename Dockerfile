@@ -11,9 +11,11 @@ RUN Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force; `
 ARG BCTYPE
 ARG BCCOUNTRY
 ARG BCVERSION
+ARG BCSTORAGEACCOUNT=bcartifacts
+ARG BCSASTOKEN
 
 RUN Import-Module navcontainerhelper; `
-    Download-Artifacts -artifactUrl (Get-BCArtifactUrl -type $env:BCTYPE -country $env:BCCOUNTRY -version $env:BCVERSION) -includePlatform;
+    Download-Artifacts -artifactUrl (Get-BCArtifactUrl -type $env:BCTYPE -country $env:BCCOUNTRY -version $env:BCVERSION -storageAccount $env:BCSTORAGEACCOUNT -sasToken $env:BCSASTOKEN) -includePlatform;
 
 RUN New-Item -Path c:\artifacts -ItemType Directory; `
     New-Item -Path c:\bin -ItemType Directory; `
