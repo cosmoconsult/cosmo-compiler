@@ -1,5 +1,6 @@
 # escape=`
 ARG BASEVERSION
+ARG BASETYPE
 FROM mcr.microsoft.com/windows/servercore:$BASEVERSION as mother
 ARG NCHVERSION
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';"]
