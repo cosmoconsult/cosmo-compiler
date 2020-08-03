@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: '2a75b31a-ab2f-4511-a1f6-f5ffaf1ce240'
   imageRepository: 'compiler'
   containerRegistry: 'cosmo.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile.core'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(TYPE)-$(VERSION)-$(COUNTRY)-$(BASE)-$(Build.BuildId)'
   
   # Agent VM image name
