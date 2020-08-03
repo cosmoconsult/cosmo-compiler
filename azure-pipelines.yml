@@ -37,7 +37,7 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
-        arguments: --build-arg BASEVERSION=$(BASEVERSION) --build-arg BASETYPE=$(BASETYPE) --build-arg NCHVERSION=$(NCHVERSION) --build-arg BCTYPE=$(BCTYPE) --build-arg BCVERSION=$(BCVERSION) --build-arg BCCOUNTRY=$(BCCOUNTRY)
+        arguments: --build-arg BASEVERSION=$(BASEVERSION) --build-arg BASETYPE=$(BASETYPE) --build-arg NCHVERSION=$(NCHVERSION) --build-arg BCTYPE=$(BCTYPE) --build-arg BCVERSION=$(BCVERSION) --build-arg BCCOUNTRY=$(BCCOUNTRY) --build-arg BCSASTOKEN=$(BCSASTOKEN) --build-arg BCSTORAGEACCOUNT=$(BCSTORAGEACCOUNT)
     
     - task: Docker@2
       displayName: Push an image to container registry
