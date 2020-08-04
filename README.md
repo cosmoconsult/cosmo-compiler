@@ -15,7 +15,7 @@ For building the image you need to specify certain build arguments:
 The image itself is build by the following:`
 
 ```
-docker build -t <imagename>:<tag> --build-arg BASEVERSION=<sac tag> --build-arg BASETYPE=<servercore or nanoserver> --build-arg NCHVERSION=<Version> --build-arg BCTYPE=<OnPrem/Sandbox> --build-arg BCCOUNTRY=<de> --build-arg VBCERSION=<16.2.13509.13779> .
+docker build -t <imagename>:<tag> --build-arg BASEVERSION=<sac tag> --build-arg BASETYPE=<servercore or nanoserver> --build-arg NCHVERSION=<Version> --build-arg BCTYPE=<OnPrem/Sandbox> --build-arg BCCOUNTRY=<de> --build-arg BCVERSION=<16.2.13509.13779> .
 ```
 
 # Run the container
