@@ -11,10 +11,10 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '2a75b31a-ab2f-4511-a1f6-f5ffaf1ce240'
-  imageRepository: 'compiler'
+  imageRepository: 'compiler-$(BASETYPE)'
   containerRegistry: 'cosmo.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile.core'
-  tag: '$(TYPE)-$(VERSION)-$(COUNTRY)-$(BASE)-$(Build.BuildId)'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(BCTYPE)-$(BCVERSION)-$(BCCOUNTRY)-$(BASEVERSION)-$(Build.BuildId)'
   
   # Agent VM image name
   vmImageName: 'windows-2019'
@@ -37,7 +37,7 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
-        arguments: --build-arg BASE=$(BASE) --build-arg NCHVERSION=$(NCHVERSION) --build-arg TYPE=$(TYPE) --build-arg VERSION=$(VERSION) --build-arg COUNTRY=$(COUNTRY)
+        arguments: --build-arg BASEVERSION=$(BASEVERSION) --build-arg BASETYPE=$(BASETYPE) --build-arg NCHVERSION=$(NCHVERSION) --build-arg BCTYPE=$(BCTYPE) --build-arg BCVERSION=$(BCVERSION) --build-arg BCCOUNTRY=$(BCCOUNTRY) --build-arg BCSASTOKEN=$(BCSASTOKEN) --build-arg BCSTORAGEACCOUNT=$(BCSTORAGEACCOUNT)
     
     - task: Docker@2
       displayName: Push an image to container registry
