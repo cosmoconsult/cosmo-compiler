@@ -22,12 +22,12 @@ docker build -t <imagename>:<tag> --build-arg BASEVERSION=<sac tag> --build-arg 
 
 The most simple variant for running the compiler would be:
 ```
-docker run -v <App Folder Host>:C:\src -v -e RulesetFile="c:\src\Cop.ruleset.json" --name alcnano --rm alc:<tag>
+docker run -v <App Folder Host>:C:\src -e RulesetFile="c:\src\Cop.ruleset.json" --name alcnano --rm <imagename>:<tag>
 ```
 
 If the compile process takes a long time you can try to improve it by granting more memory to the container. This reduced the compile time of about 7000 AL files from over 30 minutes to 3 minutes.
 ```
-docker run -v <App Folder Host>:C:\src -v -e RulesetFile="c:\src\Cop.ruleset.json" --memory 10G --name alcnano --rm alc:<tag>
+docker run -v <App Folder Host>:C:\src -e RulesetFile="c:\src\Cop.ruleset.json" --memory 10G --name alcnano --rm <imagename>:<tag>
 ```
 
 # Choosing the right image
