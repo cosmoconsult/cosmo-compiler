@@ -37,7 +37,7 @@ COPY --from=mother C:/assemblies c:/assemblies
 COPY Dummy.ruleset.json c:\dummy.ruleset.json
 USER ContainerAdministrator 
 RUN if NOT exist c:\windows\assembly ( mkdir c:\windows\assembly )
-
+USER ContainerUser
 ENV rulesetfile='c:\dummy.ruleset.json'
 CMD c:\bin\win32\alc.exe `
     /project:c:\src `
