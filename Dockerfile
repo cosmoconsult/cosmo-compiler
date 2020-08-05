@@ -35,9 +35,12 @@ COPY --from=mother c:/alc/extension/bin c:/bin
 COPY --from=mother C:/artifacts C:/symbols
 COPY --from=mother C:/assemblies c:/assemblies
 COPY Dummy.ruleset.json c:\dummy.ruleset.json
-
+USER ContainerAdministrator 
+RUN if NOT exist c:\windows\assembly ( mkdir c:\windows\assembly )
+USER ContainerUser
 ENV rulesetfile='c:\dummy.ruleset.json'
-CMD c:\bin\win32\alc.exe `
+CMD if not exist c:\src\.netpackages `
+    (c:\bin\win32\alc.exe `
     /project:c:\src `
     /packagecachepath:c:\symbols `
     /out:c:\src\app.app `
@@ -47,4 +50,15 @@ CMD c:\bin\win32\alc.exe `
     /analyzer:c:\bin\Analyzers\Microsoft.Dynamics.Nav.CodeCop.dll `
     /analyzer:c:\bin\Analyzers\Microsoft.Dynamics.Nav.AppSourceCop.dll `
     /analyzer:c:\bin\Analyzers\Microsoft.Dynamics.Nav.UICop.dll `
-    /assemblyprobingpaths:"c:\assemblies\OpenXMLSdk","C:\src\.netpackages","C:\assemblies\RoleTailoredClient","C:\assemblies\Service","C:\assemblies\MockAssemblies","c:\windows\assembly"
+    /assemblyprobingpaths:"c:\assemblies\OpenXMLSdk","C:\assemblies\RoleTailoredClient","C:\assemblies\Service","C:\assemblies\MockAssemblies","c:\windows\assembly") else `
+    (c:\bin\win32\alc.exe `
+    /project:c:\src `
+    /packagecachepath:c:\symbols `
+    /out:c:\src\app.app `
+    /errorlog:c:\src\alc.log `
+    /loglevel:Warning `
+    /ruleset:%rulesetfile% `
+    /analyzer:c:\bin\Analyzers\Microsoft.Dynamics.Nav.CodeCop.dll `
+    /analyzer:c:\bin\Analyzers\Microsoft.Dynamics.Nav.AppSourceCop.dll `
+    /analyzer:c:\bin\Analyzers\Microsoft.Dynamics.Nav.UICop.dll `
+    /assemblyprobingpaths:"c:\assemblies\OpenXMLSdk","C:\src\.netpackages","C:\assemblies\RoleTailoredClient","C:\assemblies\Service","C:\assemblies\MockAssemblies","c:\windows\assembly")
