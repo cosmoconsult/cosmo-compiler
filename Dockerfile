@@ -49,4 +49,4 @@ CMD c:\bin\win32\alc.exe `
     /analyzer:c:\bin\Analyzers\Microsoft.Dynamics.Nav.CodeCop.dll `
     /analyzer:c:\bin\Analyzers\Microsoft.Dynamics.Nav.AppSourceCop.dll `
     /analyzer:c:\bin\Analyzers\Microsoft.Dynamics.Nav.UICop.dll `
-    /assemblyprobingpaths:"c:\assemblies\OpenXMLSdk","C:\assemblies\RoleTailoredClient","C:\assemblies\Service","C:\assemblies\MockAssemblies","c:\windows\assembly"
+    /assemblyprobingpaths:"c:\assemblies\OpenXMLSdk","C:\src\.netpackages","C:\assemblies\RoleTailoredClient","C:\assemblies\Service","C:\assemblies\MockAssemblies","c:\windows\assembly"
