@@ -38,11 +38,11 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '2a75b31a-ab2f-4511-a1f6-f5ffaf1ce240'
+  dockerRegistryServiceConnection: 'CosmoDockerRegistryConnection'
   imageRepository: 'compiler-$(BASETYPE)'
   containerRegistry: 'cosmo.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
-  tag: '$(BCTYPE)-$(BCVERSION)-$(BCCOUNTRY)-$(BASEVERSION)-$(Build.BuildId)'
+  tag: '$(BCTYPE)-$(BCVERSION)-$(BCCOUNTRY)-$(BASEVERSION)'
   
   # Agent VM image name
   vmImageName: 'windows-2019'
