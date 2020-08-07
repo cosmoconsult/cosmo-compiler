@@ -1,6 +1,34 @@
 # Docker
 # Build and push an image to Azure Container Registry
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+parameters:
+  - name: BASETYPE
+    type: string
+    default: servercore
+    values:
+      - servercore
+      - nanoserver
+  - name: BASEVERSION
+    type: string
+    default: 1809
+  - name: BCCOUNTRY
+    type: string
+    default: de
+  - name: BCSASTOKEN
+    type: string
+    default: ""
+  - name: BCSTORAGEACCOUNT
+    type: string
+    default: bcartifacts
+  - name: BCTYPE
+    type: string
+    default: onprem
+  - name: BCVERSION
+    type: string
+    default: 16.3
+  - name: NCHVERSION
+    type: string
+    default: 0.7.0.23
 
 trigger:
 - master
