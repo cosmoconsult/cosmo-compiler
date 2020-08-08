@@ -16,7 +16,7 @@ parameters:
     default: de
   - name: BCSASTOKEN
     type: string
-    default: ""
+    default: " "
   - name: BCSTORAGEACCOUNT
     type: string
     default: bcartifacts
