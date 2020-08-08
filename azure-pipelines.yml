@@ -38,7 +38,7 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'CosmoDockerRegistryConnection'
+  dockerRegistryServiceConnection: '2a75b31a-ab2f-4511-a1f6-f5ffaf1ce240'
   imageRepository: 'compiler-${{ parameters.BASETYPE }}'
   containerRegistry: 'cosmo.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
