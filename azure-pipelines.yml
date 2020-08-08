@@ -39,10 +39,10 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'CosmoDockerRegistryConnection'
-  imageRepository: 'compiler-$(BASETYPE)'
+  imageRepository: 'compiler-${{ parameters.BASETYPE }}'
   containerRegistry: 'cosmo.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
-  tag: '$(BCTYPE)-$(BCVERSION)-$(BCCOUNTRY)-$(BASEVERSION)'
+  tag: '${{ parameters.BCTYPE }}-${{ parameters.BCVERSION }}-${{ parameters.BCCOUNTRY }}-${{ parameters.BASEVERSION }}'
   
   # Agent VM image name
   vmImageName: 'windows-2019'
@@ -65,7 +65,7 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
-        arguments: --build-arg BASEVERSION=$(BASEVERSION) --build-arg BASETYPE=$(BASETYPE) --build-arg NCHVERSION=$(NCHVERSION) --build-arg BCTYPE=$(BCTYPE) --build-arg BCVERSION=$(BCVERSION) --build-arg BCCOUNTRY=$(BCCOUNTRY) --build-arg BCSASTOKEN=$(BCSASTOKEN) --build-arg BCSTORAGEACCOUNT=$(BCSTORAGEACCOUNT)
+        arguments: --build-arg BASEVERSION=${{ parameters.BASEVERSION }} --build-arg BASETYPE=${{ parameters.BASETYPE }} --build-arg NCHVERSION=${{ parameters.NCHVERSION }} --build-arg BCTYPE=${{ parameters.BCTYPE }} --build-arg BCVERSION=${{ parameters.BCVERSION }} --build-arg BCCOUNTRY=${{ parameters.BCCOUNTRY }} --build-arg BCSASTOKEN=${{ parameters.BCSASTOKEN }} --build-arg BCSTORAGEACCOUNT=${{ parameters.BCSTORAGEACCOUNT }}
     
     - task: Docker@2
       displayName: Push an image to container registry
