@@ -68,8 +68,15 @@ stages:
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tagbuildno)
+        ${{ if eq(parameters.LatestTag, true) }}:
+          tags: |
+            $(tag)
+            $(tagbuildno)
+            $(latestTag)
+        ${{ if eq(parameters.LatestTag, false) }}:
+          tags: |
+            $(tag)
+            $(tagbuildno)
         arguments: --build-arg BASEVERSION=${{ parameters.BASEVERSION }} --build-arg BASETYPE=${{ parameters.BASETYPE }} --build-arg NCHVERSION=${{ parameters.NCHVERSION }} --build-arg BCTYPE=${{ parameters.BCTYPE }} --build-arg BCVERSION=${{ parameters.BCVERSION }} --build-arg BCCOUNTRY=${{ parameters.BCCOUNTRY }} --build-arg BCSASTOKEN=${{ parameters.BCSASTOKEN }} --build-arg BCSTORAGEACCOUNT=${{ parameters.BCSTORAGEACCOUNT }}
     
     - task: Docker@2
