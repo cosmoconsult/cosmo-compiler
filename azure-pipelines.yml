@@ -29,6 +29,9 @@ parameters:
   - name: NCHVERSION
     type: string
     default: 0.7.0.23
+  - name: LatestTag
+    type: boolean
+    default: true
 
 trigger:
 - master
@@ -42,7 +45,9 @@ variables:
   imageRepository: 'compiler-${{ parameters.BASETYPE }}'
   containerRegistry: 'cosmo.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tagbuildno: '${{ parameters.BCTYPE }}-${{ parameters.BCVERSION }}-${{ parameters.BCCOUNTRY }}-${{ parameters.BASEVERSION }}-$(Build.BuildId)'
   tag: '${{ parameters.BCTYPE }}-${{ parameters.BCVERSION }}-${{ parameters.BCCOUNTRY }}-${{ parameters.BASEVERSION }}'
+  latestTag: '${{ parameters.BCTYPE }}-${{ parameters.BCCOUNTRY }}-${{ parameters.BASEVERSION }}'
   
   # Agent VM image name
   vmImageName: 'windows-2019'
@@ -64,7 +69,7 @@ stages:
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
-          $(tag)
+          $(tagbuildno)
         arguments: --build-arg BASEVERSION=${{ parameters.BASEVERSION }} --build-arg BASETYPE=${{ parameters.BASETYPE }} --build-arg NCHVERSION=${{ parameters.NCHVERSION }} --build-arg BCTYPE=${{ parameters.BCTYPE }} --build-arg BCVERSION=${{ parameters.BCVERSION }} --build-arg BCCOUNTRY=${{ parameters.BCCOUNTRY }} --build-arg BCSASTOKEN=${{ parameters.BCSASTOKEN }} --build-arg BCSTORAGEACCOUNT=${{ parameters.BCSTORAGEACCOUNT }}
     
     - task: Docker@2
@@ -73,5 +78,12 @@ stages:
         command: push
         repository: $(imageRepository)
         containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
+        ${{ if eq(parameters.LatestTag, true) }}:
+          tags: |
+            $(tag)
+            $(tagbuildno)
+            $(latestTag)
+        ${{ if eq(parameters.LatestTag, false) }}:
+          tags: |
+            $(tag)
+            $(tagbuildno)
