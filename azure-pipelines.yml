@@ -1,6 +1,37 @@
 # Docker
 # Build and push an image to Azure Container Registry
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+parameters:
+  - name: BASETYPE
+    type: string
+    default: servercore
+    values:
+      - servercore
+      - nanoserver
+  - name: BASEVERSION
+    type: string
+    default: 1809
+  - name: BCCOUNTRY
+    type: string
+    default: de
+  - name: BCSASTOKEN
+    type: string
+    default: " "
+  - name: BCSTORAGEACCOUNT
+    type: string
+    default: bcartifacts
+  - name: BCTYPE
+    type: string
+    default: onprem
+  - name: BCVERSION
+    type: string
+    default: 16.3
+  - name: NCHVERSION
+    type: string
+    default: 0.7.0.23
+  - name: LatestTag
+    type: boolean
+    default: true
 
 trigger:
 - master
@@ -11,10 +42,12 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '2a75b31a-ab2f-4511-a1f6-f5ffaf1ce240'
-  imageRepository: 'compiler-$(BASETYPE)'
+  imageRepository: 'compiler-${{ parameters.BASETYPE }}'
   containerRegistry: 'cosmo.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
-  tag: '$(BCTYPE)-$(BCVERSION)-$(BCCOUNTRY)-$(BASEVERSION)-$(Build.BuildId)'
+  tagbuildno: '${{ parameters.BCTYPE }}-${{ parameters.BCVERSION }}-${{ parameters.BCCOUNTRY }}-${{ parameters.BASEVERSION }}-$(Build.BuildId)'
+  tag: '${{ parameters.BCTYPE }}-${{ parameters.BCVERSION }}-${{ parameters.BCCOUNTRY }}-${{ parameters.BASEVERSION }}'
+  latestTag: '${{ parameters.BCTYPE }}-${{ parameters.BCCOUNTRY }}-${{ parameters.BASEVERSION }}'
   
   # Agent VM image name
   vmImageName: 'windows-2019'
@@ -35,9 +68,16 @@ stages:
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
-        arguments: --build-arg BASEVERSION=$(BASEVERSION) --build-arg BASETYPE=$(BASETYPE) --build-arg NCHVERSION=$(NCHVERSION) --build-arg BCTYPE=$(BCTYPE) --build-arg BCVERSION=$(BCVERSION) --build-arg BCCOUNTRY=$(BCCOUNTRY) --build-arg BCSASTOKEN=$(BCSASTOKEN) --build-arg BCSTORAGEACCOUNT=$(BCSTORAGEACCOUNT)
+        ${{ if eq(parameters.LatestTag, true) }}:
+          tags: |
+            $(tag)
+            $(tagbuildno)
+            $(latestTag)
+        ${{ if eq(parameters.LatestTag, false) }}:
+          tags: |
+            $(tag)
+            $(tagbuildno)
+        arguments: --build-arg BASEVERSION=${{ parameters.BASEVERSION }} --build-arg BASETYPE=${{ parameters.BASETYPE }} --build-arg NCHVERSION=${{ parameters.NCHVERSION }} --build-arg BCTYPE=${{ parameters.BCTYPE }} --build-arg BCVERSION=${{ parameters.BCVERSION }} --build-arg BCCOUNTRY=${{ parameters.BCCOUNTRY }} --build-arg BCSASTOKEN=${{ parameters.BCSASTOKEN }} --build-arg BCSTORAGEACCOUNT=${{ parameters.BCSTORAGEACCOUNT }}
     
     - task: Docker@2
       displayName: Push an image to container registry
@@ -45,5 +85,12 @@ stages:
         command: push
         repository: $(imageRepository)
         containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
+        ${{ if eq(parameters.LatestTag, true) }}:
+          tags: |
+            $(tag)
+            $(tagbuildno)
+            $(latestTag)
+        ${{ if eq(parameters.LatestTag, false) }}:
+          tags: |
+            $(tag)
+            $(tagbuildno)
